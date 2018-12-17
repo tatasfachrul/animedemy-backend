@@ -11,7 +11,7 @@ class UserController {
 		.where('username', data_insert.username)
 		.orWhere('email', data_insert.email)
 
-		if (check != null || check != "") {
+		if (check != "") {
 			return response.status(404).json({data: 'Insert Data Gagal'})
 		}else{
 			const data_user = new ModelUser()
@@ -31,6 +31,21 @@ class UserController {
 	    .authenticator('jwt')
 	    .withRefreshToken()
 	    .attempt(email, password)
+	}
+
+	async RefreshToken({request, auth}){
+		const refreshToken = request.input('refresh_token')
+		return await auth
+		.newRefreshToken()
+		.generateForRefreshToken(refreshToken)
+	}
+
+	async Logout({auth, response}){
+		const apiToken = auth.getAuthHeader()
+		await auth
+		.authenticator('jwt')
+		.revokeTokens([apiToken])
+		return response.json({data: "Logout"})
 	}
 
 	async Profile({ response, auth }) {

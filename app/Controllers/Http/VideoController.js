@@ -13,12 +13,12 @@ class VideoController {
 	async cached(){
 		const cachedUsers = await Redis.get('users')
 	    if (cachedUsers) {
-	      return JSON.parse(cachedUsers)
+	      return json(cachedUsers)
 	    }
 
 	    const users = await User.all()
 	    await Redis.set('users', JSON.stringify(users))
-	    return users
+	    return json(users)
 	}
 	async video_id({params, response}){
 		const id = params.id
