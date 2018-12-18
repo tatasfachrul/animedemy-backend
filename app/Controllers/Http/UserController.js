@@ -1,6 +1,7 @@
 'use strict'
 const Database = use('Database')
 const ModelUser = use('App/Models/User')
+const ModelSubscribe = use('App/Models/Subscribe')
 
 class UserController {
 	async register({request, response}){
@@ -37,19 +38,33 @@ class UserController {
 		const refreshToken = request.input('refresh_token')
 		return await auth
 		.newRefreshToken()
-		.generateForRefreshToken(refreshToken)
+  		.generateForRefreshToken(refreshToken)
 	}
 
 	async Logout({auth, response}){
 		const apiToken = auth.getAuthHeader()
 		await auth
 		.authenticator('jwt')
-		.revokeTokens([apiToken])
-		return response.json({data: "Logout"})
+		.revokeTokens([apiToken], true)
+		return response.send({ data: 'Logout successfully!'})
 	}
 
 	async Profile({ response, auth }) {
 	  return response.send(auth.current.user)
+	}
+
+	async user_subscribe({ response, auth }) {
+		const id = auth.current.user.id
+		const email = auth.current.user.email
+		const cek = await Database.from('subscribes').where('user', id)
+		if (cek != "") {
+			return response.json({data: email+" Sudah Subscribe"})
+		}
+		const data_subscribe = new ModelSubscribe()
+		data_subscribe.user = id
+		data_subscribe.email = email
+		await data_subscribe.save()
+		return response.json({data: email+" Berhasil Subscribe"})
 	}
 
 }

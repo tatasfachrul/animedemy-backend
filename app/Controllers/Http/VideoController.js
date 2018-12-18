@@ -3,7 +3,6 @@
 const Redis = use('Redis')
 const Database = use('Database')
 const ModelVideos = use('App/Models/Video')
-const User = use('App/Models/User')
 
 class VideoController {
 	async index({response}){
@@ -11,14 +10,14 @@ class VideoController {
 		return response.json(data_movies)
 	}
 	async cached(){
-		const cachedUsers = await Redis.get('users')
-	    if (cachedUsers) {
-	      return json(cachedUsers)
+		const cachedVideos = await Redis.get('videos')
+	    if (cachedVideos) {
+	      return cachedVideos
 	    }
 
-	    const users = await User.all()
-	    await Redis.set('users', JSON.stringify(users))
-	    return json(users)
+	    const videos = await ModelVideos.all()
+	    await Redis.set('users', JSON.stringify(videos))
+	    return videos
 	}
 	async video_id({params, response}){
 		const id = params.id

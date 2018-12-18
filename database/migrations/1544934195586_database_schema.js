@@ -31,12 +31,19 @@ class DatabaseSchema extends Schema {
       table.boolean('is_popular').defaultTo(false)
       table.timestamps()
     })
+    this.create('subscribe', (table) => {
+      table.increments()
+      table.integer('user').notNullable()
+      table.string('email').notNullable()
+      table.timestamps()
+    })
   }
 
   down () {
     this.drop('categories')
     this.drop('series')
     this.drop('videos')
+    this.drop('subscribe')
   }
 }
 

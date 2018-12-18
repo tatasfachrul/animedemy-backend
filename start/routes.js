@@ -22,12 +22,15 @@ Route.group(() => {
 
 Route.post('login', 'UserController.Login')
 Route.get('profile', 'UserController.Profile').middleware(['auth:jwt'])
+Route.post('logout', 'UserController.Logout').middleware(['auth:jwt'])
+Route.post('refreshlogin', 'UserController.RefreshToken').middleware(['auth:jwt'])
 Route.post('register','UserController.register')
+Route.post('subscribe','UserController.user_subscribe').middleware(['auth:jwt'])
 
 Route.get('categories','CategoryController.index').middleware(['auth:jwt'])
 
 Route.get('videos','VideoController.index').middleware(['auth:jwt'])
-Route.get('videos/cached','VideoController.cached')
+Route.get('videos/cached','VideoController.cached').middleware(['auth:jwt'])
 Route.get('video/:id','VideoController.video_id').middleware(['auth:jwt'])
 Route.get('videos/search','VideoController.videos_search').middleware(['auth:jwt'])
 Route.get('video/:id/related','VideoController.video_related').middleware(['auth:jwt'])
@@ -37,5 +40,6 @@ Route.get('videos/trending','VideoController.videos_trending').middleware(['auth
 
 Route.post('video/insert','VideoController.video_insert').middleware(['auth:jwt'])
 Route.post('videos/insert','VideoController.videos_insert').middleware(['auth:jwt'])
+
 }).prefix('api/v1')
 
