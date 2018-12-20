@@ -125,6 +125,7 @@ class VideoController {
 		    this
 		      .on('videos.category_id', 'categories.id')
 		})
+		.groupBy('videos.series_id')
 		.leftJoin('series', function () {
 		    this
 		      .on('videos.series_id', 'series.id')
