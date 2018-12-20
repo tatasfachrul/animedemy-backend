@@ -6,7 +6,7 @@ const ModelVideos = use('App/Models/Video')
 
 class VideoController {
 	async index({response}){
-		const data_movies = await Database.from('videos')
+		const data_movies = await Database.from('videos').orderBy('id', 'desc')
 		return response.json(data_movies)
 	}
 	async cached(){
@@ -63,6 +63,7 @@ class VideoController {
 		.orWhere('videos.imdb_score','like','%'+search+'%')
 		.orWhere('categories.title','like','%'+search+'%')
 		.orWhere('series.title','like','%'+search+'%')
+		.orderBy('videos.id', 'desc')
 		if (data_movies == "") {
 			return response.status(404).json({data: 'data tidak ditemukan'})	
 		}
@@ -135,13 +136,38 @@ class VideoController {
 		return response.json(data_movies)
 	}
 	async videos_popular({response}){
-		const data_movies = await Database.from('videos').where('is_popular', 1)
+		const data_movies = await Database.from('videos').where('is_popular', 1).orderBy('id', 'desc')
 		return response.json(data_movies)
 	}
 	async videos_trending({response}){
-		const data_movies = await Database.from('videos').where('is_trending', 1)
+		const data_movies = await Database.from('videos').where('is_trending', 1).orderBy('id', 'desc')
 		return response.json(data_movies)
 	}
+	async videos_seriesList({response}){
+		const data_series = await Database.from('series')
+		return response.json(data_series)
+	}
+	async videos_by_series({params, response}){
+		const id_series = params.id
+		const data_videos = await Database.from('videos').where('series_id', id_series)
+		return response.json(data_videos)
+	}
+	async videos_by_category({params, response}){
+		const id_category = params.id
+		const data_videos = await Database.from('videos').where('category_id', id_category)
+		return response.json(data_videos)
+	}
+	async series({response}){
+		const data_series = await Database
+		.select('series.id as id','series.title as series', 'videos.image_url')
+		.from('series')
+		.leftJoin('videos', function(){
+			this
+			.on('series.id', 'videos.series_id')
+		})
+		return response.json(data_series)
+	}
+
 	async video_insert({request, response}){
 		const data_insert = request.only(
 				[

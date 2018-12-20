@@ -4,8 +4,6 @@ const ModelUser = use('App/Models/User')
 const ModelSubscribe = use('App/Models/Subscribe')
 
 class UserController {
-
-	
 	async register({request, response}){
 		const data_insert = request.only(["username","email","name","password"])
 
@@ -30,7 +28,7 @@ class UserController {
 
 	async Login({ request, auth }) {
 	  const { email, password } = request.all()
-	  return await auth
+	  return auth
 	    .authenticator('jwt')
 	    .withRefreshToken()
 	    .attempt(email, password)

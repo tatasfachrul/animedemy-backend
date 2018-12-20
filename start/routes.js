@@ -20,26 +20,31 @@ Route.on('/').render('welcome')
 
 Route.group(() => {
 
-Route.post('login', 'UserController.Login')
-Route.get('profile', 'UserController.Profile').middleware(['auth:jwt'])
-Route.post('logout', 'UserController.Logout').middleware(['auth:jwt'])
-Route.post('refreshlogin', 'UserController.RefreshToken').middleware(['auth:jwt'])
-Route.post('register','UserController.register')
-Route.post('subscribe','UserController.user_subscribe').middleware(['auth:jwt'])
-
-Route.get('categories','CategoryController.index')
-
-Route.get('videos','VideoController.index')
-Route.get('videos/cached','VideoController.cached')
-Route.get('video/:id','VideoController.video_id')
-Route.get('videos/search','VideoController.videos_search')
-Route.get('video/:id/related','VideoController.video_related')
-Route.get('video/:id/series','VideoController.video_series')
-Route.get('videos/popular','VideoController.videos_popular')
-Route.get('videos/trending','VideoController.videos_trending')
-
-Route.post('video/insert','VideoController.video_insert').middleware(['auth:jwt'])
-Route.post('videos/insert','VideoController.videos_insert').middleware(['auth:jwt'])
+    Route.post('login', 'UserController.Login')
+    Route.get('profile', 'UserController.Profile')
+    Route.post('logout', 'UserController.Logout')
+    Route.post('refreshlogin', 'UserController.RefreshToken')
+    Route.post('register','UserController.register')
+    Route.post('subscribe','UserController.user_subscribe')
+    
+    Route.get('categories','CategoryController.index')
+    Route.get('series', 'VideoController.series')
+    Route.get('videos_series', 'VideoController.videos_seriesList')
+    
+    Route.get('videos','VideoController.index')
+    Route.get('videos/cached','VideoController.cached')
+    Route.get('video/:id','VideoController.video_id')
+    Route.get('videos/search','VideoController.videos_search')
+    Route.get('video/:id/related','VideoController.video_related')
+    Route.get('video/:id/series','VideoController.video_series')
+    Route.get('videos/popular','VideoController.videos_popular')
+    Route.get('videos/trending','VideoController.videos_trending')
+    
+    Route.get('videos/series/:id', 'VideoController.videos_by_series')
+    Route.get('videos/category/:id', 'VideoController.videos_by_category')
+    
+    Route.post('video/insert','VideoController.video_insert').middleware(['auth:jwt'])
+    Route.post('videos/insert','VideoController.videos_insert').middleware(['auth:jwt'])
 
 }).prefix('api/v1')
 
